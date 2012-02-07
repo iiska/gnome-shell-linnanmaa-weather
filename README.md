@@ -1,4 +1,4 @@
-![Screenshot](screenshot.jpg)
+![Screenshot](blob/master/screenshot.jpg)
 
 ## Installation
 
