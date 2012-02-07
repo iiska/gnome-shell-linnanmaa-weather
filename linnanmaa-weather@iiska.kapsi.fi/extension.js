@@ -30,8 +30,11 @@ WeatherMenuButton.prototype = {
         let hbox = new St.BoxLayout({name: 'weather-details-area'});
         this.menu.addActor(hbox);
 
-        this.detailLabels = new St.BoxLayout({name: 'weather-detail-labels',
-                                              vertical: true});
+        this.detailLabels = new St.BoxLayout({
+            name: 'weather-detail-labels',
+            style_class: 'weather-detail-labels',
+            vertical: true
+        });
         hbox.add(this.detailLabels);
 
         let label;
@@ -46,8 +49,11 @@ WeatherMenuButton.prototype = {
         label = new St.Label({text: "Airpressure"});
         this.detailLabels.add(label);
 
-        this.detailValues = new St.BoxLayout({name: 'weather-detail-values',
-                                              vertical: true});
+        this.detailValues = new St.BoxLayout({
+            name: 'weather-detail-values',
+            style_class: 'weather-detail-values',
+            vertical: true
+        });
         hbox.add(this.detailValues);
     },
 
