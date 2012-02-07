@@ -1,4 +1,4 @@
-![Screenshot](blob/master/screenshot.jpg)
+![Screenshot](https://github.com/iiska/gnome-shell-linnanmaa-weather/blob/master/screenshot.jpg)
 
 ## Installation
 
