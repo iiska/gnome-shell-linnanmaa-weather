@@ -13,6 +13,7 @@ const ITEMS = [
     ['temphi', 'High'],
     ['templo', 'Low'],
     ['windchill', 'Windchill'],
+    ['windspeed', 'Windspeed'],
     ['humidity', 'Humidity'],
     ['airpressure', 'Airpressure']
 ];
