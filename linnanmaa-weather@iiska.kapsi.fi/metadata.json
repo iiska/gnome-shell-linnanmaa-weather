@@ -1,1 +1,1 @@
-{"shell-version": ["3.2.1"], "uuid": "linnanmaa-weather@iiska.kapsi.fi", "name": "Linnanmaa Weather", "description": "Shows weather data retrieved from weather.willab.fi"}
+{"shell-version": ["3.2.1"], "uuid": "linnanmaa-weather@iiska.kapsi.fi", "name": "Linnanmaa Weather", "description": "Shows weather data retrieved from weather.willab.fi", "url": "https://github.com/iiska/gnome-shell-linnanmaa-weather/"}
