@@ -9,6 +9,13 @@ const Soup = imports.gi.Soup;
 const _httpSession = new Soup.SessionAsync();
 Soup.Session.prototype.add_feature.call(_httpSession, new Soup.ProxyResolverDefault());
 
+const ITEMS = [
+    ['temphi', 'High'],
+    ['templo', 'Low'],
+    ['windchill', 'Windchill'],
+    ['humidity', 'Humidity'],
+    ['airpressure', 'Airpressure']
+];
 
 function WeatherMenuButton() {
     this._init.apply(this, arguments);
@@ -38,16 +45,10 @@ WeatherMenuButton.prototype = {
         hbox.add(this.detailLabels);
 
         let label;
-        label = new St.Label({text: "High"});
-        this.detailLabels.add(label);
-        label = new St.Label({text: "Low"});
-        this.detailLabels.add(label);
-        label = new St.Label({text: "Windchill"});
-        this.detailLabels.add(label);
-        label = new St.Label({text: "Humidity"});
-        this.detailLabels.add(label);
-        label = new St.Label({text: "Airpressure"});
-        this.detailLabels.add(label);
+        for (i in ITEMS) {
+            label = new St.Label({text: _(ITEMS[i][1])});
+            this.detailLabels.add(label);
+        }
 
         this.detailValues = new St.BoxLayout({
             name: 'weather-detail-values',
@@ -93,18 +94,10 @@ WeatherMenuButton.prototype = {
 
         this.detailValues.destroy_children();
         let value;
-
-        value = new St.Label({text: format(data.weather.temphi)});
-        this.detailValues.add(value);
-        value = new St.Label({text: format(data.weather.templo)});
-        this.detailValues.add(value);
-        value = new St.Label({text: format(data.weather.windchill)});
-        this.detailValues.add(value);
-        value = new St.Label({text: format(data.weather.humidity)});
-        this.detailValues.add(value);
-        value = new St.Label({text: format(data.weather.airpressure)});
-        this.detailValues.add(value);
-
+        for (i in ITEMS) {
+            value = new St.Label({text: format(data.weather[ITEMS[i][0]])});
+            this.detailValues.add(value);
+        }
     }
 };
 
