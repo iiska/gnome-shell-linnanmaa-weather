@@ -21,15 +21,22 @@ function _getData(callback) {
     });
 }
 
-function _updateData() {
+function _updateData(recurse) {
     _getData(function(s,r) {
         let response = r.response_body.data.replace(/^<\?xml\s+version\s*=\s*(["'])[^\1]+\1[^?]*\?>/, "");
         let data = new XML(response);
-        text.set_text(data.weather.tempnow + data.weather.tempnow.@unit);
+        text.set_text(data.weather.tempnow + ' ' + data.weather.tempnow.@unit);
     });
+
+    if (recurse) {
+        Mainloop.timeout_add_seconds(1800, function() {
+            _updateData(true);
+        });
+    }
 }
 
 function _showDetails() {
+    // TODO: Open popup menu with detailed weather data
 }
 
 function init() {
@@ -50,20 +57,14 @@ function init() {
     hbox.add(text);
 
     button.set_child(hbox);
-    button.connect('button-press-event', _updateData);
+    button.connect('button-press-event', _showDetails);
 }
 
 function enable() {
     Main.panel._centerBox.insert_actor(button, 0);
-    _updateData();
-
-    //Mainloop.timeout_add_seconds(1800, function() {
-    //    _updateData();
-    //});
-    //Mainloop.run('updatedata');
+    _updateData(true);
 }
 
 function disable() {
-    //Mainloop.quit('updatedata');
     Main.panel._centerBox.remove_actor(button);
 }
