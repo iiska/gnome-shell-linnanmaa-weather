@@ -91,8 +91,8 @@ WeatherMenuButton.prototype = {
         this._dbus
             .connect('StateChanged',
                      Lang.bind(this, function(o, state) {
-                         if (state = NetworkManager.DeviceState.ACTIVATED) {
-                             this.update(false);
+                         if (state == NetworkManager.DeviceState.IP_CONFIG) {
+                             this.updateData(false, 3);
                          }
                      }));
     },
@@ -108,19 +108,24 @@ WeatherMenuButton.prototype = {
         });
     },
 
-    updateData: function(recurse) {
-        let self = this;
-        this._getData(function(s,r) {
+    updateData: function(recurse, timeout) {
+        if (timeout) {
+            Mainloop.timeout_add_seconds(timeout, Lang.bind(this, function() {
+                this.updateData(recurse);
+            }));
+        }
+
+        this._getData(Lang.bind(this, function(s,r) {
             let response = r.response_body.data.replace(/^<\?xml\s+version\s*=\s*(["'])[^\1]+\1[^?]*\?>/, "");
             let data = new XML(response);
-            self._refreshView(data);
+            this._refreshView(data);
 
-        });
+        }));
 
         if (recurse) {
-            Mainloop.timeout_add_seconds(1800, function() {
-                self.updateData(true);
-            });
+            Mainloop.timeout_add_seconds(1800, Lang.bind(this, function() {
+                this.updateData(true);
+            }));
         }
     },
 
