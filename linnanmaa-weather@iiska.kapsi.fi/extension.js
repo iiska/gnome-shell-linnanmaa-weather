@@ -6,8 +6,36 @@ const Mainloop = imports.mainloop;
 const Lang = imports.lang;
 const Soup = imports.gi.Soup;
 
+const DBus = imports.dbus;
+const NetworkManager = imports.gi.NetworkManager;
+
 const _httpSession = new Soup.SessionAsync();
 Soup.Session.prototype.add_feature.call(_httpSession, new Soup.ProxyResolverDefault());
+
+/* We want to be notified via DBus when network connection is
+ * up. Declare DBus interface and proxy
+ *
+ * Recognizing new connection enables us to update weather data
+ * immediately when system resumes from suspend or hibernate. */
+const NetworkManagerIFace = {
+    name: 'org.freedesktop.NetworkManager',
+    signals: [{ name: 'StateChanged',
+                inSignature: 'i'}]
+}
+
+function NetworkManager2Extension() {
+    this._init();
+}
+
+NetworkManager2Extension.prototype = {
+    _init: function() {
+        DBus.system.proxifyObject(this, 'org.freedesktop.NetworkManager',
+                                  '/org/freedesktop/NetworkManager', this);
+    }
+};
+DBus.proxifyPrototype(NetworkManager2Extension.prototype,
+                      NetworkManagerIFace);
+
 
 const ITEMS = [
     ['temphi', 'High'],
@@ -57,6 +85,16 @@ WeatherMenuButton.prototype = {
             vertical: true
         });
         hbox.add(this.detailValues);
+
+        this._dbus = new NetworkManager2Extension();
+        // Update data immediately after network is up.
+        this._dbus
+            .connect('StateChanged',
+                     Lang.bind(this, function(o, state) {
+                         if (state = NetworkManager.DeviceState.ACTIVATED) {
+                             this.update(false);
+                         }
+                     }));
     },
 
     _getData: function(callback) {
