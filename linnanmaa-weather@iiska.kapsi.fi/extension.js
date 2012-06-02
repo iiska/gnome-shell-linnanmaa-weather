@@ -1,4 +1,5 @@
 
+const Clutter = imports.gi.Clutter;
 const St = imports.gi.St;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
@@ -55,7 +56,7 @@ WeatherMenuButton.prototype = {
 
     _init: function() {
         let menuAlignment = 0.25;
-        if (St.Widget.get_default_direction() == St.TextDirection.RTL) {
+        if (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL) {
             menuAlignment = 1.0 - menuAlignment;
         }
         PanelMenu.Button.prototype._init.call(this, menuAlignment);
@@ -153,7 +154,7 @@ function init() {
 }
 
 function enable() {
-    Main.panel._centerBox.insert_actor(weather.actor, 0);
+    Main.panel._centerBox.insert_child_at_index(weather.actor, 0);
     weather.updateData(true);
 }
 
